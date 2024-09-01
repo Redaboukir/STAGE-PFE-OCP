@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phosphate Price Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Event handler for prediction buttons
+            $(".prediction-button").click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr("href");
+                $.get(url, function(data) {
+                    $('#prediction-diagram').html('<img src="data:image/png;base64,' + data.plot_url + '" alt="Prévisions">');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Analyse des Prix des Phosphates</h1>
+        
+        <div class="button-container">
+            <a class="button" href="/">5 ans</a>
+            <a class="button" href="/?years=10">10 ans</a>
+            <a class="button" href="/?years=15">15 ans</a>
+            <a class="button" href="/?years=20">20 ans</a>
+            <a class="button" href="/?years=30">30 ans</a>
+        </div>
+        
+        <div class="diagram-container">
+            <h2>Diagramme des prix ({{ years }} ans)</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Prix des phosphates">
+        </div>
+        
+        <div class="predictions">
+            <h3>Prévisions</h3>
+            <p><strong>Prévision à court terme :</strong> {{ short_term_prediction }} $</p>
+            <p><strong>Prévision à long terme :</strong> {{ long_term_prediction }} $</p>
+            <a class="button prediction-button" href="/prediction/short">Voir Diagramme Court Terme</a>
+            <a class="button prediction-button" href="/prediction/long">Voir Diagramme Long Terme</a>
+        </div>
+        
+        <div id="prediction-diagram"></div>
+    </div>
+</body>
